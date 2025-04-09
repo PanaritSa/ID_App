@@ -28,7 +28,6 @@ model, features, image_paths = load_model_and_data()
 
 # ---------- FUNCTION: GET INFO FROM SQLITE ----------
 def get_property_info(image_path):
-    # เปิด connection ใหม่ทุกครั้ง (เพื่อแก้ปัญหา thread-safe)
     with sqlite3.connect("property_full_data_clickable.db") as conn:
         cursor = conn.cursor()
         cursor.execute("""
@@ -82,7 +81,7 @@ uploaded_file = st.file_uploader("📤 อัปโหลดภาพห้อ�
 
 if uploaded_file:
     query_img = Image.open(uploaded_file)
-    st.image(query_img, caption="📷 ภาพที่อัปโหลด", use_column_width=False, width=300)
+    st.image(query_img, caption="📷 ภาพที่อัปโหลด", use_container_width=False, width=300)
 
     st.subheader("🔍 ผลการค้นหาที่คล้ายกัน:")
     results = search_similar_images(query_img)
@@ -91,7 +90,7 @@ if uploaded_file:
         st.markdown("---")
         cols = st.columns([1, 2])
         with cols[0]:
-            st.image(result["img_path"], use_column_width=True)
+            st.image(result["img_path"], use_container_width=True)
         with cols[1]:
             info = result["info"]
             if info:
